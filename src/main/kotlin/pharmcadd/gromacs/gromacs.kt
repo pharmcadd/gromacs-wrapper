@@ -98,7 +98,7 @@ class Pdb2gmx(
 }
 
 fun main() {
-    val build = Pdb2gmx(
+    val line = Pdb2gmx(
         f = "5TNT_ALL.pdb",
         o = "5TNT.gro",
         ff = ForceField.gromos53a6,
@@ -108,5 +108,5 @@ fun main() {
         water = Water.spc,
         merge = Merge.all
     ).build()
-    println(build)
+    println(line)
 }
