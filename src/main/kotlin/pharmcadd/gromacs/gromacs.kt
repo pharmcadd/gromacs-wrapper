@@ -31,7 +31,7 @@ interface Command {
 class Pdb2gmx(
     val f: String,
     val o: String,
-    val ff: ForceField = ForceField.select,
+    val ff: String = ForceField.select.name,
     val ignh: Boolean = false,
     val ss: Boolean = false,
     val ter: Boolean = false,
@@ -51,7 +51,7 @@ class Pdb2gmx(
 
     enum class ForceField {
         select,
-        amber03, amber94, amber96, amber99, amber99sb_ildn, amber99sb, amberGS,
+        amber03, amber94, amber96, amber99, `amber99sb-ildn`, amber99sb, amberGS,
         charmm27,
         gromos43a1, gromos43a2, gromos45a3,
         gromos53a5, gromos53a6, gromos54a7,
@@ -81,7 +81,7 @@ class Pdb2gmx(
             command(),
             "-f $f",
             "-o $o",
-            "-ff ${ff.name.replace("_", "-")}",
+            "-ff $ff",
             "-ss ${ss.option()}",
             "-ter ${ter.option()}",
             "-lys ${lys.option()}",
@@ -101,7 +101,7 @@ fun main() {
     val line = Pdb2gmx(
         f = "5TNT_ALL.pdb",
         o = "5TNT.gro",
-        ff = ForceField.gromos53a6,
+        ff = ForceField.gromos53a6.name,
         ignh = true,
         ter = true,
         ss = true,
