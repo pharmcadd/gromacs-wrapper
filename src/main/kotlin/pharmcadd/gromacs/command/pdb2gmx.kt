@@ -1,23 +1,6 @@
-package pharmcadd.gromacs
+package pharmcadd.gromacs.command
 
-import pharmcadd.gromacs.Pdb2gmx.*
-
-private fun String.extension(): String {
-    return this.substringAfterLast(".", "")
-}
-
-private fun Boolean.option(): String {
-    return if (this) "" else "no"
-}
-
-interface Command {
-    val command: String
-    val help: String
-
-    fun build(): String = listOf(command, *options().toTypedArray()).joinToString(" ")
-
-    fun options(): List<String>
-}
+import pharmcadd.gromacs.extension.option
 
 class Pdb2gmx(
     val f: String,
@@ -41,7 +24,6 @@ class Pdb2gmx(
     override val help = "http://manual.gromacs.org/documentation/current/onlinehelp/gmx-pdb2gmx.html"
 
     enum class ForceField {
-        select,
         amber03, amber94, amber96, amber99, `amber99sb-ildn`, amber99sb, amberGS,
         charmm27,
         gromos43a1, gromos43a2, gromos45a3,
@@ -54,7 +36,7 @@ class Pdb2gmx(
     }
 
     enum class Water {
-        select, none, spc, spce, tip3p, tip4p, tip5p, tips3p
+        none, spc, spce, tip3p, tip4p, tip5p, tips3p
     }
 
     override fun options(): List<String> {
@@ -82,12 +64,11 @@ fun main() {
     val line = Pdb2gmx(
         f = "5TNT_ALL.pdb",
         o = "5TNT.gro",
-        ff = ForceField.gromos53a6.name,
+        ff = Pdb2gmx.ForceField.gromos53a6.name,
+        inter = false,
         ignh = true,
-        ter = true,
-        ss = true,
-        water = Water.spc,
-        merge = Merge.all
+        water = Pdb2gmx.Water.spc,
+        merge = Pdb2gmx.Merge.all
     ).build()
     println(line)
 }
